@@ -15,29 +15,35 @@ export default function FormTarea() {
     const navigate = useNavigate();
     const params = useParams();
 
-    const handleSubmit = async (e) => { 
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setCargando(true);
- 
-        if(editando) {
-            await fetch(`http://localhost:3001/tareas/${params.id}`, {
+        try {
+          if (editando) {
+            const response = await fetch(
+              "http://localhost:3001/tareas/" + params.id,
+              {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                }, 
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(tarea),
+              }
+            );
+            await response.json();
+          } else {
+            const response = await fetch("http://localhost:3001/tareas", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(tarea),
             });
-        } else {
-            await fetch('http://localhost:3001/tareas', {
-            method: 'POST',
-            body: JSON.stringify(tarea),
-            headers: { 'Content-Type': 'application/json' },
-        });
+            await response.json();
+          }
+    
+          setCargando(false);
+          navigate("/");
+        } catch (error) {
+          console.error(error);
         }
-        
-        setCargando(false);
-        navigate('/');
-    };
+      };
 
     const handleChange = (e) => {
         setTarea({ ...tarea, [e.target.name]: e.target.value });
@@ -60,7 +66,7 @@ export default function FormTarea() {
         <Grid
             container
             direction="column"
-            alingItems="center"
+            alingitems="center"
             justifyContent="center"
         >
             <Grid item xs={3}>
