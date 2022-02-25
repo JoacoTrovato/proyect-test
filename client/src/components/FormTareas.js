@@ -60,7 +60,7 @@ export default function FormTarea() {
         <Grid
             container
             direction="column"
-            alingitems="center"
+            alingItems="center"
             justifyContent="center"
         >
             <Grid item xs={3}>
